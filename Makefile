@@ -1,4 +1,5 @@
 IMAGE_NAME := ib-gateway
+CONTAINER_NAME := ib-gateway
 PORT := 5000
 
 .PHONY: build
@@ -7,17 +8,17 @@ build:
 
 .PHONY: run
 run:
-	docker run -d -p $(PORT):$(PORT) $(IMAGE_NAME)
+	docker run -d -p $(PORT):$(PORT) --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 .PHONY: stop
 stop:
-	docker stop $(shell docker ps -q --filter ancestor=$(IMAGE_NAME))
+	docker stop $(CONTAINER_NAME)
 
 .PHONY: clean
 clean:
 	docker rmi $(IMAGE_NAME)
-	docker rm -f $(shell docker ps -a -q --filter ancestor=$(IMAGE_NAME))
+	docker rm -f $(CONTAINER_NAME)
 
 .PHONY: logs
 logs:
-	docker logs -f $(shell docker ps -a -q --filter ancestor=$(IMAGE_NAME))
+	docker logs -f $(CONTAINER_NAME)
